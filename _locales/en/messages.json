@@ -1,10 +1,10 @@
 {
   "extension_name":{
-    "message":"Ed2kHelper",
+    "message":"LiWuHelper",
     "description":"Extension Name"
   },
   "extension_description":{
-    "message":"An extension that helps you to deal with ed2k/eMule/eDonkey links in bulk, with functions of select range and filename search.",
+    "message":"helper for liwu",
     "description":"Extension Description"
   },
   "error_scope":{

@@ -1,6 +1,8 @@
 {
   "name":"__MSG_extension_name__",
   "version":"3.0",
+  "manifest_version": 2,
+  "default_locale": "en",
   "icons":{
     "19":"icon19.png",
     "48":"icon48.png",		
@@ -26,13 +28,11 @@
   "content_scripts":[
     {
     "matches" : [        
-      "https://www.253874.com/*",        
-      "http://192.168.1.100/*",
-      "file://*/*"
+      "https://www.253874.com/*"
     ],
     "js" : ["jquery.js","contentscript.js"],
     "run_at" : "document_idle",
     "all_frames" : true
-  }
+    }
   ]
 }
