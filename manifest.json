@@ -4,10 +4,10 @@
   "manifest_version": 2,
   "default_locale": "en",
   "icons":{
-    "16":"icon16.png",
-    "19":"icon19.png",
-    "48":"icon48.png",		
-    "128":"icon128.png"		
+    "16":"images/icon16.png",
+    "19":"images/icon19.png",
+    "48":"images/icon48.png",		
+    "128":"images/icon128.png"		
   },
   "background": {
     "scripts":["background.js"]
@@ -19,9 +19,24 @@
     "tabs",		
     "unlimitedStorage" 
   ],
-
+  "web_accessible_resources":[
+	"images/animated-overlay.gif",
+	"images/ui-bg_flat_0_aaaaaa_40x100.png",
+	"images/ui-bg_flat_75_ffffff_40x100.png",
+	"images/ui-bg_glass_55_fbf9ee_1x400.png",
+	"images/ui-bg_glass_65_ffffff_1x400.png",
+	"images/ui-bg_glass_75_dadada_1x400.png",
+	"images/ui-bg_glass_75_e6e6e6_1x400.png",
+	"images/ui-bg_glass_95_fef1ec_1x400.png",
+	"images/ui-bg_highlight-soft_75_cccccc_1x100.png",
+	"images/ui-icons_2e83ff_256x240.png",
+	"images/ui-icons_222222_256x240.png",
+	"images/ui-icons_454545_256x240.png",
+	"images/ui-icons_888888_256x240.png",
+	"images/ui-icons_cd0a0a_256x240.png"
+  ],
   "page_action":{
-    "default_icon": "icon19.png",
+    "default_icon": "images/icon19.png",
     "default_title": "__MSG_extension_name__",
     "default_popup": "popup.html"
   },
@@ -31,7 +46,8 @@
     "matches" : [        
       "https://www.253874.com/*"
     ],
-    "js" : ["jquery.js","contentscript.js"],
+    "js" : ["libs/jquery.js","libs/jquery-ui.min.js","contentscript.js","liwu.js"],
+	"css": ["css/jquery-ui.min.css"],
     "run_at" : "document_idle",
     "all_frames" : true
     }

@@ -1,6 +1,6 @@
 #里屋助手Chrome插件
 ##这是一个方便里屋人士的Chrome插件  
-安装方式: [Google WebStore page](https://chrome.google.com/webstore/detail/liwuhelper/gkejkdobapifnlhjfbollfinpmciabgj)
+    安装方式: [Google WebStore page](https://chrome.google.com/webstore/detail/liwuhelper/gkejkdobapifnlhjfbollfinpmciabgj)
 -------------------------------------
 2.0新增功能: (传送门:[2.0](https://www.253874.com/new/adminfo.asp?html=0&id=218348), [1.0](https://www.253874.com/new/info2.asp?id=217680))  
 1)跳楼 //输入要跳的楼数可以直接跳到该楼  
