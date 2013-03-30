@@ -10,7 +10,7 @@
     "128":"images/icon128.png"		
   },
   "background": {
-    "scripts":["background.js"]
+    "scripts":["js/background.js"]
   },
   "description":"__MSG_extension_description__",
   "permissions": [ 
@@ -38,7 +38,7 @@
   "page_action":{
     "default_icon": "images/icon19.png",
     "default_title": "__MSG_extension_name__",
-    "default_popup": "popup.html"
+    "default_popup": "html/popup.html"
   },
   "homepage_url":"https://github.com/reducm/LiWuChromePlugin",
   "content_scripts":[
@@ -46,8 +46,8 @@
     "matches" : [        
       "https://www.253874.com/*"
     ],
-    "js" : ["libs/jquery.js","libs/jquery-ui.min.js","contentscript.js","liwu.js"],
-	"css": ["css/jquery-ui.min.css"],
+    "js" : ["js/libs/jquery.js","js/libs/jquery-ui.min.js","js/contentscript.js","js/liwu.js"],
+	"css": ["css/jquery-ui.min.css","css/style.css"],
     "run_at" : "document_idle",
     "all_frames" : true
     }
