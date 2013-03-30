@@ -33,7 +33,8 @@
 	"images/ui-icons_222222_256x240.png",
 	"images/ui-icons_454545_256x240.png",
 	"images/ui-icons_888888_256x240.png",
-	"images/ui-icons_cd0a0a_256x240.png"
+	"images/ui-icons_cd0a0a_256x240.png",
+	"images/leftbg.jpg"
   ],
   "page_action":{
     "default_icon": "images/icon19.png",
@@ -47,7 +48,7 @@
       "https://www.253874.com/*"
     ],
     "js" : ["js/libs/jquery.min.js","js/libs/jquery-ui.min.js","js/contentscript.js","js/liwu.js"],
-	"css": ["css/jquery-ui.min.css","css/style.css"],
+	"css": ["css/jquery-ui.min.css"],
     "run_at" : "document_idle",
     "all_frames" : true
     }

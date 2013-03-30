@@ -59,6 +59,9 @@
 			return content;
 		}
 	},
+	popup:{
+		
+	},
 	rightPanel: {
 		topic: {},
 		orgstr: "",

@@ -1,5 +1,5 @@
 * {font-size: 14px;margin:0px;padding:0px;}
-body{background:url("./leftbg.jpg");}
+body{background:url("chrome-extension://__MSG_@@extension_id__/images/leftbg.jpg");}
 #content{width:650px;}
 #right{width:320px;float:left;height:230px;font-size:12px;overflow-y:hidden;}
 #left{width:320px;float:left;height:230px;}
