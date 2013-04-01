@@ -62,10 +62,13 @@
 				content = i[pos];
 			}
 			return content;
+		},
+		unique_array: function(arr_itm){
+			var unique_arr = arr_itm.filter(function(itm,i,arr_itm){
+    			return i == arr_itm.indexOf(itm);
+			});
+			return unique_arr;
 		}
-	},
-	popup:{
-		init: function(){}
 	},
 	rightPanel: {
 		topic: {},
@@ -74,19 +77,15 @@
 			this.orgstr = document.body.innerHTML;
 			var start_time = 0;
 			if ( liwu.global.checkIsCorrectPanel("right.css") ){
-				// add toolbar div tag before topic title
-				$("title").after('<div class="clr">&nbsp;</div>');
-				console.log("==== Start Data Init ====");
 				start_time = new Date();
 				this.parseTopic();
-				console.log(this.topic);
-				console.log("==== Finish Data Init "+(( new Date() - start_time)/1000)+" seconds ====");
+				//console.log(this.topic);
+				console.log("==== Data Init "+(( new Date() - start_time)/1000)+" seconds ====");
+				// add toolbar div tag before topic title
+				$("title").after('<div class="clr">&nbsp;</div>');
 				this.addToolBar();
 				// add action
 				this.addButtonAction();
-
-				
-				
 			}
 		},
 		regExp: {
@@ -112,8 +111,46 @@
 					$.scrollTo( $("#floor_"+jump_num), 800, {offset:-30} );
 				}
 			});
+			// only show ta
+			$("select[name=only_ta]").change(function(){
+				var floors = $(this).val().split(",");
+				liwu.rightPanel.showFloors(floors);
+			});
 			
+		},
+		showFloors: function(floors){
+			console.log("==== 只看 ====");
+
+			// init floor class
+			$(".floor").addClass("hide_floor");
 			
+			$.each(floors, function(){
+				if ( this > 0 ){
+					$("#floor_"+this).removeClass("hide_floor");
+				}else{
+					$(".floor").removeClass("hide_floor");
+				}
+			});
+			$(".floor").each(function(){
+				if ( $(this).hasClass("hide_floor") ){
+					$(this).slideUp("fast");
+				}else{
+					$(this).slideDown("fast");
+				}
+			});
+			
+			/*
+			var animationDelay = 400;
+			var offset = 200;
+			$(".hide_floor").each(function(){
+				setTimeout(function(){
+        			$(this).animate({
+            			opacity: "0",
+            			height: "0px"
+        			}, animationDelay);
+    			},$(this).index() * offset);
+			});
+			*/
 		},
 		addToolBar: function(){
 			$("body").append('<div id="toolbar"></div>');
@@ -128,13 +165,39 @@
 			
 			html += '<li><select name="only_ta">';
 			html += '<option value="0">'+only_ta+'</option>';
-			//html += this.getAuthorListHtml();
+			html += this.getAuthorListHtml();
 			html += '</select></li>';
 			
 			html += '<li><input type="text" name="jump_num" value="" placeholder="'+jump_to+'" size="2" /><input type="button" name="jump_to" value="跳" /></li>';
 			$("#toolbar").append('<ul>'+html+'</ul>');
 			// add button sytle
 			$("#toolbar input[type=button]").button();
+		},
+		getAuthorListHtml: function(){
+			var list_html = "";
+			var authors = this.getAuthorList();
+			var replies = this.topic.replies;
+			$.each(authors, function(idx,author){
+				var floors = new Array();
+				$.each(replies, function(){
+					if ( this.reply_author == author ){
+						floors.push(this.reply_floor);
+					}
+				})
+				list_html += '<option value="'+floors+'">'+author+'</option>';
+			})
+			return list_html;
+		},
+		getAuthorList: function(){
+			var authors = new Array();
+			var replies = this.topic.replies;
+			$.each(replies, function(){
+				if ( this.reply_author){
+					authors.push(this.reply_author);
+				}
+			});
+			authors = liwu.global.unique_array(authors);
+			return authors;
 		},
 		parseTopic: function(){
 			this.topic = {
@@ -144,7 +207,7 @@
 				"topic_time": liwu.global.dealReg(this.orgstr, this.regExp.reg_topic_time),
 				"reply_form": $("form[name=revert]").html(),
 				"toolbar": liwu.global.dealReg(this.orgstr, this.regExp.reg_toolbar, 1),
-				"replies": this.parseReplies()
+				"replies": this.parseReplies(),
 				};
 		},
 		parseReplies: function(){
