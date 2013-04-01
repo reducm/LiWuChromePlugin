@@ -79,7 +79,7 @@
 			if ( liwu.global.checkIsCorrectPanel("right.css") ){
 				start_time = new Date();
 				this.parseTopic();
-				//console.log(this.topic);
+				console.log(this.topic);
 				console.log("==== Data Init "+(( new Date() - start_time)/1000)+" seconds ====");
 				// add toolbar div tag before topic title
 				$("title").after('<div class="clr">&nbsp;</div>');
@@ -116,7 +116,6 @@
 				var floors = $(this).val().split(",");
 				liwu.rightPanel.showFloors(floors);
 			});
-			
 		},
 		showFloors: function(floors){
 			console.log("==== 只看 ====");
@@ -154,14 +153,15 @@
 		},
 		addToolBar: function(){
 			$("body").append('<div id="toolbar"></div>');
+			var html = '';
 			//only show LZ
-			var only_lz = "只看楼主";
+			//var only_lz = "只看楼主";
 			//jump to floor
 			var jump_to = "跳楼";
 			// only show author
 			var only_ta = "只看TA";
 			
-			var html = '<li><input type="button" name="only_lz" value="'+only_lz+'" /></li>';
+			//var html = '<li><input type="button" name="only_lz" value="'+only_lz+'" /></li>';
 			
 			html += '<li><select name="only_ta">';
 			html += '<option value="0">'+only_ta+'</option>';
@@ -184,6 +184,9 @@
 						floors.push(this.reply_floor);
 					}
 				})
+				if ( idx == 0 ){
+					author += " (楼主)";
+				}
 				list_html += '<option value="'+floors+'">'+author+'</option>';
 			})
 			return list_html;
@@ -191,6 +194,7 @@
 		getAuthorList: function(){
 			var authors = new Array();
 			var replies = this.topic.replies;
+			authors.push(this.topic.topic_author);
 			$.each(replies, function(){
 				if ( this.reply_author){
 					authors.push(this.reply_author);
@@ -229,13 +233,18 @@
 					var reply_content = $(this).find("font[title]").text().replace(/[\n\r]/g, '');
 					var reply_reference = 0;
 					var reply_time = $(this).find("font[title]").attr("title");
+					
+					// deleted reply
+					if (!reply_content){
+						reply_content = $(this).find("font[color=#C0C0C0]").text().replace(/[\n\r]/g, '');
+					}
 					// check, if the reply content is empty, need to check the reference or yama
 					if ( !reply_content ){
 						var misc = liwu.rightPanel.parseMisc(this, reply_time, floor_id);
 						reply_content = misc.reply_content;
 						reply_reference = misc.reply_reference;
 					}else{
-						$("#"+floor_id).append($(this));
+						$("#"+floor_id).append( $(this) );
 					}
 					var reply_link = $(this).find("a").first().attr("href");
 					
