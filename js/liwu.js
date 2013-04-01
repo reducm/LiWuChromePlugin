@@ -137,19 +137,6 @@
 					$(this).slideDown("fast");
 				}
 			});
-			
-			/*
-			var animationDelay = 400;
-			var offset = 200;
-			$(".hide_floor").each(function(){
-				setTimeout(function(){
-        			$(this).animate({
-            			opacity: "0",
-            			height: "0px"
-        			}, animationDelay);
-    			},$(this).index() * offset);
-			});
-			*/
 		},
 		addToolBar: function(){
 			$("body").append('<div id="toolbar"></div>');
@@ -298,9 +285,6 @@
 		divAroundHTML: function(floor_id, misc){
 			$("#"+floor_id).append(misc.prev());
 			$("#"+floor_id).append(misc);
-		},
-		getUserList: function(){
-			
 		}
 	}
 }
