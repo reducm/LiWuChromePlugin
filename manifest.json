@@ -47,8 +47,8 @@
     "matches" : [        
       "https://www.253874.com/*"
     ],
-    "js" : ["js/libs/jquery.min.js","js/libs/jquery-ui.min.js","js/contentscript.js","js/liwu.js"],
-	"css": ["css/jquery-ui.min.css"],
+    "js" : ["js/libs/jquery.min.js","js/libs/jquery-ui.min.js","js/liwu.js","js/libs/jquery.scrollTo.min.js"],
+	"css": ["css/jquery-ui.min.css","css/style.css"],
     "run_at" : "document_idle",
     "all_frames" : true
     }

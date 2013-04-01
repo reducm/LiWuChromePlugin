@@ -33,6 +33,11 @@
  *		}
  *  }
  */
+ $(document).ready(function(){
+ 	liwu.global.init();
+ });
+ 
+ 
  
  var liwu = {
 	global: {
@@ -60,7 +65,7 @@
 		}
 	},
 	popup:{
-		
+		init: function(){}
 	},
 	rightPanel: {
 		topic: {},
@@ -69,20 +74,23 @@
 			this.orgstr = document.body.innerHTML;
 			var start_time = 0;
 			if ( liwu.global.checkIsCorrectPanel("right.css") ){
+				// add toolbar div tag before topic title
+				$("title").after('<div class="clr">&nbsp;</div>');
 				console.log("==== Start Data Init ====");
 				start_time = new Date();
 				this.parseTopic();
 				console.log(this.topic);
 				console.log("==== Finish Data Init "+(( new Date() - start_time)/1000)+" seconds ====");
-				/*
-				console.log("==== Start Rebuild HTML ====");
-				start_time = new Date();
-				var html = this.rebuildHTML();
-				console.log("==== Finish Rebuild HTML "+(( new Date() - start_time)/1000)+" seconds ====");
-				*/
+				this.addToolBar();
+				// add action
+				this.addButtonAction();
+
+				
+				
 			}
 		},
 		regExp: {
+			reg_topic			: /<\/title>(.+?)<hr><script/i,
 			reg_topic_title 	: /<\/title><a href=\".+?\">(.+?)<\/a>.+?【新窗打开】.+?<\/a>/i,
 			reg_topic_author 	: /<span.+?>(<b>)?(.+?)(【.+?】)?(<\/b>)?<\/span>/i,
 			reg_topic_content 	: /<hr>(.+?)<br><a .+?>---<\/a><a .+?><\/a>/i,
@@ -96,8 +104,37 @@
 			reg_reply_author    : /fatieren2=(.+?)(【.+?】)?\&fatieren=/i, // TODO: something not right
 			reg_misc_reference  : /引用(.+?)楼内容/i
 		},
-		rebuildHTML: function(){
+		addButtonAction: function(){
+			// jump
+			$("input[name=jump_to]").click(function(){
+				var jump_num = $("input[name=jump_num]").val();
+				if ( jump_num > 0 ){
+					$.scrollTo( $("#floor_"+jump_num), 800, {offset:-30} );
+				}
+			});
 			
+			
+		},
+		addToolBar: function(){
+			$("body").append('<div id="toolbar"></div>');
+			//only show LZ
+			var only_lz = "只看楼主";
+			//jump to floor
+			var jump_to = "跳楼";
+			// only show author
+			var only_ta = "只看TA";
+			
+			var html = '<li><input type="button" name="only_lz" value="'+only_lz+'" /></li>';
+			
+			html += '<li><select name="only_ta">';
+			html += '<option value="0">'+only_ta+'</option>';
+			//html += this.getAuthorListHtml();
+			html += '</select></li>';
+			
+			html += '<li><input type="text" name="jump_num" value="" placeholder="'+jump_to+'" size="2" /><input type="button" name="jump_to" value="跳" /></li>';
+			$("#toolbar").append('<ul>'+html+'</ul>');
+			// add button sytle
+			$("#toolbar input[type=button]").button();
 		},
 		parseTopic: function(){
 			this.topic = {
@@ -113,21 +150,29 @@
 		parseReplies: function(){
 			var replies = new Array();
 			var reply_misc = '';
+			var jas = $();
+			$("a:has(span)").first().after('<div id="jas"></div>');
 
 			// get replies
 			$.each($("p:contains('回复')"), function(){
 				var reply_html = $(this).html();
 				var reply_floor = liwu.global.dealReg( reply_html, liwu.rightPanel.regExp.reg_reply_floor);
 				if ( reply_floor > 0){
+					// prepay container
+					var floor_id = "floor_"+reply_floor;
+					$(this).before('<div class="floor" id="'+floor_id+'"></div>');
+					
 					// get reply content and remove carriage return
 					var reply_content = $(this).find("font[title]").text().replace(/[\n\r]/g, '');
 					var reply_reference = 0;
 					var reply_time = $(this).find("font[title]").attr("title");
 					// check, if the reply content is empty, need to check the reference or yama
 					if ( !reply_content ){
-						var misc = liwu.rightPanel.parseMisc(this, reply_time);
+						var misc = liwu.rightPanel.parseMisc(this, reply_time, floor_id);
 						reply_content = misc.reply_content;
 						reply_reference = misc.reply_reference;
+					}else{
+						$("#"+floor_id).append($(this));
 					}
 					var reply_link = $(this).find("a").first().attr("href");
 					
@@ -140,15 +185,17 @@
 						"reply_link": reply_link
 					};
 					replies[reply_floor] = replay;
+					$("#"+floor_id).appendTo( $("#jas") );
 				}
 			});
 			return replies
 		},
-		parseMisc: function(reply, reply_time){
+		parseMisc: function(reply, reply_time, floor_id){
 			// TODO: need working on Yama
 			var get_first_tagname = $(reply).next().prop("tagName");
 			var reply_reference = 0;
 			var reply_content = "";
+			var misc = '';
 			switch( get_first_tagname ){
 				// include html
 				case "DIV":
@@ -157,12 +204,15 @@
 							reply_content += $(this).html();
 						}
 					});
+					misc = $(reply).nextAll().slice(0, 6);
+					this.divAroundHTML(floor_id, misc);
 					break;
 				//reference
 				case "FIELDSET":
-					var misc = $(reply).nextAll().slice(0, 5);
+					misc = $(reply).nextAll().slice(0, 5);
 					reply_reference = liwu.global.dealReg( misc.html(), this.regExp.reg_misc_reference);
 					reply_content = misc.next().html();
+					this.divAroundHTML(floor_id, misc);
 					break;
 			}
 			var reply_misc = {
@@ -172,6 +222,10 @@
 			}
 
 			return reply_misc;
+		},
+		divAroundHTML: function(floor_id, misc){
+			$("#"+floor_id).append(misc.prev());
+			$("#"+floor_id).append(misc);
 		},
 		getUserList: function(){
 			

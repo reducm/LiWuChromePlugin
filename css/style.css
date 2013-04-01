@@ -1,18 +1,38 @@
-* {font-size: 14px;margin:0px;padding:0px;}
-body{background:url("chrome-extension://__MSG_@@extension_id__/images/leftbg.jpg");}
-#content{width:650px;}
-#right{width:320px;float:left;height:230px;font-size:12px;overflow-y:hidden;}
-#left{width:320px;float:left;height:230px;}
-#result{width:120px;overflow-x:hidden;overflow-y:auto;height:228px;float:left;}
-#table{
-  border:1px solid orange;border-collapse: collapse;border-spacing: 0px;	
+.clr{
+	height:30px;
+	display: block;
 }
-#info{margin-bottom:5px;overflow-x:hidden;}
-#table  td{border:1px solid orange;}
-.orange {border:1px solid orange;}
-#buttons  div{border:1px solid orange;padding:3px;}
-#buttons{float:left}
-#warn{color:red;}
-input[type="text"] {width:35px;}
-input{font-size:12px;}
-#left  div{border:1px solid orange;padding:3px;}
+#toolbar{
+	position: fixed;
+	top: 0px;
+	background: #6A9ADB;
+	height: 30px;
+	display: block;
+	width: 100%;
+	left: 0px;
+}
+#toolbar ul{
+	padding: 0px;
+	margin: 0px;
+	list-style: none;
+}
+#toolbar ul li{
+	float: left;
+	clear: none;
+	padding: 0px 5px;
+	line-height: 30px;
+	height: 30px;
+}
+#toolbar input[type=button],
+#toolbar input[type=text],
+#toolbar select{
+	padding: 2px 5px;
+}
+#toolbar input[name=jump_num],
+#toolbar select{
+	border: 1px rgb(211,211,211) solid;
+	border-radius: 4px;
+}
+#toolbar input[name=jump_to]{
+	margin-top: -1px;
+}
