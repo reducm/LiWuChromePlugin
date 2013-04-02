@@ -37,7 +37,8 @@
 	"images/leftbg.jpg",
 	"images/ajax-loader.gif",
 	"images/jquery.wysiwyg.bg.png",
-	"images/jquery.wysiwyg.gif"
+	"images/jquery.wysiwyg.gif",
+	"css/editor.css"
   ],
   "page_action":{
     "default_icon": "images/icon19.png",

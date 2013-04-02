@@ -90,7 +90,7 @@
 				this.addButtonAction();
 				// add wysiwyg
 				$("textarea").wysiwyg({
-					/*resizeOptions: {},*/
+					css: chrome.extension.getURL("css/editor.css"),
 					rmUnusedControls: true,
 					initialContent: "",
 					autoGrow: true, 
