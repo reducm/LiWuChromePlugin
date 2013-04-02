@@ -34,7 +34,10 @@
 	"images/ui-icons_454545_256x240.png",
 	"images/ui-icons_888888_256x240.png",
 	"images/ui-icons_cd0a0a_256x240.png",
-	"images/leftbg.jpg"
+	"images/leftbg.jpg",
+	"images/ajax-loader.gif",
+	"images/jquery.wysiwyg.bg.png",
+	"images/jquery.wysiwyg.gif"
   ],
   "page_action":{
     "default_icon": "images/icon19.png",
@@ -47,8 +50,8 @@
     "matches" : [        
       "https://www.253874.com/*"
     ],
-    "js" : ["js/libs/jquery.min.js","js/libs/jquery-ui.min.js","js/liwu.js","js/libs/jquery.scrollTo.min.js"],
-	"css": ["css/jquery-ui.min.css","css/style.css"],
+    "js" : ["js/libs/jquery.min.js","js/libs/jquery-ui.min.js","js/liwu.js","js/libs/jquery.scrollTo.min.js","js/libs/jquery.wysiwyg.js"],
+	"css": ["css/jquery-ui.min.css","css/style.css", "css/jquery.wysiwyg.css"],
     "run_at" : "document_idle",
     "all_frames" : true
     }

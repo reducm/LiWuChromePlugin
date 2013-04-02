@@ -33,6 +33,8 @@
  *		}
  *  }
  */
+
+	
  $(document).ready(function(){
  	liwu.global.init();
  });
@@ -86,6 +88,30 @@
 				this.addToolBar();
 				// add action
 				this.addButtonAction();
+				// add wysiwyg
+				$("textarea").wysiwyg({
+					resizeOptions: {},
+					rmUnusedControls: true,
+					initialContent: "",
+					autoGrow: true, 
+					maxHeight: 600,
+					iFrameClass: "wysiwyg-input",
+					autoSave: true,
+				    controls: {
+				        bold: { visible : true },
+				        italic: { visible : true },
+				        strikeThrough: { visible : true },
+				        underline: { visible : true },
+				        subscript: { visible : true },
+				        superscript: { visible : true },
+				        redo: { visible : true },
+				        undo: { visible : true },
+				        insertOrderedList: { visible : true },
+				        insertUnorderedList: { visible : true },
+				        removeFormat: { visible : true },
+				        html  : { visible: true }
+				    }
+				});
 			}
 		},
 		regExp: {
@@ -271,6 +297,8 @@
 					misc = $(reply).nextAll().slice(0, 5);
 					reply_reference = liwu.global.dealReg( misc.html(), this.regExp.reg_misc_reference);
 					reply_content = misc.next().html();
+
+					
 					this.divAroundHTML(floor_id, misc);
 					break;
 			}

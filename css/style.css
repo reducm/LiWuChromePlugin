@@ -36,3 +36,7 @@
 #toolbar input[name=jump_to]{
 	margin-top: -1px;
 }
+.wysiwyg-input{
+	width: 300px;
+	height: 300px;
+}
