@@ -81,7 +81,7 @@
 			if ( liwu.global.checkIsCorrectPanel("right.css") ){
 				start_time = new Date();
 				this.parseTopic();
-				console.log(this.topic);
+				//console.log(this.topic);
 				console.log("==== Data Init "+(( new Date() - start_time)/1000)+" seconds ====");
 				// add toolbar div tag before topic title
 				$("title").after('<div class="clr">&nbsp;</div>');
@@ -90,7 +90,7 @@
 				this.addButtonAction();
 				// add wysiwyg
 				$("textarea").wysiwyg({
-					resizeOptions: {},
+					/*resizeOptions: {},*/
 					rmUnusedControls: true,
 					initialContent: "",
 					autoGrow: true, 
