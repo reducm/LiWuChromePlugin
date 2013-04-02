@@ -1,0 +1,42 @@
+.clr{
+	height:30px;
+	display: block;
+}
+#toolbar{
+	position: fixed;
+	top: 0px;
+	background: #6A9ADB;
+	height: 30px;
+	display: block;
+	width: 100%;
+	left: 0px;
+}
+#toolbar ul{
+	padding: 0px;
+	margin: 0px;
+	list-style: none;
+}
+#toolbar ul li{
+	float: left;
+	clear: none;
+	padding: 0px 5px;
+	line-height: 30px;
+	height: 30px;
+}
+#toolbar input[type=button],
+#toolbar input[type=text],
+#toolbar select{
+	padding: 2px 5px;
+}
+#toolbar input[name=jump_num],
+#toolbar select{
+	border: 1px rgb(211,211,211) solid;
+	border-radius: 4px;
+}
+#toolbar input[name=jump_to]{
+	margin-top: -1px;
+}
+.wysiwyg-input{
+	width: 300px;
+	height: 300px;
+}

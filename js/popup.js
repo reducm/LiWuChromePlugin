@@ -2,6 +2,71 @@
 //自动缩图 自动匿名
 //关注 左方列表关注
 //修正background的onrequest,getArticle方法,每次打开直接获取正确的result
+
+
+var popup = {
+	global: {
+		init: function(){
+			
+		},
+		p: function(obj){	
+  			console.log(obj);
+  			alert(obj);
+		},
+		colorSelected: function(element){
+  			element.children().each(function(){
+				$(this).css("background","#e3eaf2");
+  			});
+		},
+		colorNotSelected: function(element){
+			element.children().each(function(){
+    			$(this).css("background","#ffffff");
+  			});
+		},
+		btrtd: function (str){
+  			return "<tr>"+"<td>"+str+"</td></td>";
+		},
+		check: function(){
+			if(localStorage.getItem("tie_time")==1){
+    			$("#showtime").prop("checked",true);
+  			}else{
+    			$("#showtime").prop("checked",false);
+  			}
+			if(localStorage.getItem("ltie_time")==1){
+    			$("#lshowtime").prop("checked",true);
+  			}else{
+    			$("#lshowtime").prop("checked",false);
+  			}
+  			if(localStorage.getItem("tie_niming")==1){
+    			$("#niming").prop("checked",true);
+  			}else{
+    			$("#niming").prop("checked",false);
+  			}
+		},
+		lcheckAuthor:function(){
+  			if(localStorage.getItem("ltie_author")==1){
+    			$("#lshowauthor").prop("checked",true);
+  			}else{
+    			$("#lshowauthor").prop("checked",false);
+  			}
+		},
+		ldisabled:function(){
+  			$("#left").find("input").each(function(){
+    			$(this).attr("disabled","disabled");
+  			});
+		},
+		disabled: function(){
+  			$("#right").find("input").each(function(){
+    			$(this).attr("disabled","disabled");
+  			});
+		},
+		checkDisabled:function(){}
+	}
+	
+}
+
+
+
 var names = {};
 $(document).ready(function(){
   getArticle(function(article){
@@ -430,69 +495,3 @@ function warn(str){
 }
 
 //下面是通用无关紧要////////////////////////////////////////////
-function p(obj){	
-  console.log(obj);
-  alert(obj);
-}
-
-function colorSelected(element){
-  element.children().each(function(){
-    $(this).css("background","#e3eaf2");
-  });
-}
-
-function colorNotSelected(element){
-  element.children().each(function(){
-    $(this).css("background","#ffffff");
-  });
-}
-
-function btrtd(str){
-  return "<tr>"+"<td>"+str+"</td></td>";
-}	
-
-function check(){
-  //p("r:"+localStorage.getItem("tie_time")+"\nl:"+localStorage.getItem("ltie_time"));
-  if(localStorage.getItem("tie_time")==1){
-    $("#showtime").prop("checked",true);
-  }else{
-    $("#showtime").prop("checked",false);
-  }
-
-  if(localStorage.getItem("ltie_time")==1){
-    $("#lshowtime").prop("checked",true);
-  }else{
-    $("#lshowtime").prop("checked",false);
-  }
-
-  if(localStorage.getItem("tie_niming")==1){
-    $("#niming").prop("checked",true);
-  }else{
-    $("#niming").prop("checked",false);
-  }
-}
-
-
-function lcheckAuthor(){
-  if(localStorage.getItem("ltie_author")==1){
-    $("#lshowauthor").prop("checked",true);
-  }else{
-    $("#lshowauthor").prop("checked",false);
-  }
-}
-
-function ldisabled(){
-  $("#left").find("input").each(function(){
-    $(this).attr("disabled","disabled");
-  });
-}
-
-function disabled(){
-  $("#right").find("input").each(function(){
-    $(this).attr("disabled","disabled");
-  });
-}
-
-function checkDisabled(){
-
-}
