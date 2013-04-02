@@ -198,8 +198,13 @@
 			html += this.getAuthorListHtml();
 			html += '</select></li>';
 			
+			// check total replies
+			var total_replies = this.topic.replies.length;
+			if ( total_replies > 0){
+				total_replies -= 1;
+				html += '<li><form id="frm_jump_to"><input type="text" name="jump_num" value="" placeholder="<= '+total_replies+'" size="2" /><input type="button" name="jump_to" value="跳" /></form></li>';
+			}			
 			
-			html += '<li><form id="frm_jump_to"><input type="text" name="jump_num" value="" placeholder="<= '+( this.topic.replies.length - 1 )+'" size="2" /><input type="button" name="jump_to" value="跳" /></form></li>';
 			$("#toolbar").append('<ul>'+html+'</ul>');
 			// add button sytle
 			$("#toolbar input[type=button]").button();
