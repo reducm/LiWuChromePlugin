@@ -156,7 +156,7 @@
 			var jump_num 	= parseInt( $("input[name=jump_num]").val() );
 			var max_num 	= parseInt( $("input[name=jump_num]").attr("placeholder").replace("<=","") );
 			if ( jump_num > 0 && jump_num <= max_num ){
-				$.scrollTo( $("#floor_"+jump_num), 800, {offset:-30} );
+				$.scrollTo( $("#floor_"+jump_num), 800, {offset:-39} );
 			}else{
 				alert("Please enter the number greater than 0 and smaller than "+max_num );
 			}
