@@ -132,16 +132,34 @@
 		addButtonAction: function(){
 			// jump
 			$("input[name=jump_to]").click(function(){
-				var jump_num = $("input[name=jump_num]").val();
-				if ( jump_num > 0 ){
-					$.scrollTo( $("#floor_"+jump_num), 800, {offset:-30} );
+				liwu.rightPanel.jumpfloor();
+			});
+			
+			// keyboard enter
+			$("#frm_jump_to").bind({
+				submit: function(){
+					liwu.rightPanel.jumpfloor();
+					return false;
 				}
+			});
+			// click input box and select all text
+			$("input[name=jump_num]").click(function(){
+				$(this).select();
 			});
 			// only show ta
 			$("select[name=only_ta]").change(function(){
 				var floors = $(this).val().split(",");
 				liwu.rightPanel.showFloors(floors);
 			});
+		},
+		jumpfloor: function(){
+			var jump_num 	= parseInt( $("input[name=jump_num]").val() );
+			var max_num 	= parseInt( $("input[name=jump_num]").attr("placeholder").replace("<=","") );
+			if ( jump_num > 0 && jump_num <= max_num ){
+				$.scrollTo( $("#floor_"+jump_num), 800, {offset:-30} );
+			}else{
+				alert("Please enter the number greater than 0 and smaller than "+max_num );
+			}
 		},
 		showFloors: function(floors){
 			console.log("==== 只看 ====");
@@ -170,7 +188,6 @@
 			//only show LZ
 			//var only_lz = "只看楼主";
 			//jump to floor
-			var jump_to = "跳楼";
 			// only show author
 			var only_ta = "只看TA";
 			
@@ -181,7 +198,8 @@
 			html += this.getAuthorListHtml();
 			html += '</select></li>';
 			
-			html += '<li><input type="text" name="jump_num" value="" placeholder="'+jump_to+'" size="2" /><input type="button" name="jump_to" value="跳" /></li>';
+			
+			html += '<li><form id="frm_jump_to"><input type="text" name="jump_num" value="" placeholder="<= '+( this.topic.replies.length - 1 )+'" size="2" /><input type="button" name="jump_to" value="跳" /></form></li>';
 			$("#toolbar").append('<ul>'+html+'</ul>');
 			// add button sytle
 			$("#toolbar input[type=button]").button();

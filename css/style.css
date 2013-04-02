@@ -5,11 +5,11 @@
 #toolbar{
 	position: fixed;
 	top: 0px;
-	background: #6A9ADB;
-	height: 30px;
+	height: 39px;
 	display: block;
 	width: 100%;
 	left: 0px;
+	background: url(chrome-extension://__MSG_@@extension_id__/images/bg_toolbar.png);
 }
 #toolbar ul{
 	padding: 0px;
