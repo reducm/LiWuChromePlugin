@@ -44,6 +44,31 @@
  var liwu = {
 	global: {
 		init: function(){
+			// add wysiwyg
+			$("textarea").wysiwyg({
+				css: chrome.extension.getURL("css/editor.css"),
+				rmUnusedControls: true,
+				initialContent: "",
+				autoGrow: true, 
+				maxHeight: 600,
+				iFrameClass: "wysiwyg-input",
+				autoSave: true,
+			    controls: {
+			        bold: { visible : true },
+			        italic: { visible : true },
+			        strikeThrough: { visible : true },
+			        underline: { visible : true },
+			        subscript: { visible : true },
+			        superscript: { visible : true },
+			        redo: { visible : true },
+			        undo: { visible : true },
+			        insertOrderedList: { visible : true },
+			        insertUnorderedList: { visible : true },
+			        removeFormat: { visible : true },
+			        html  : { visible: true }
+			    }
+			});
+				
 			liwu.rightPanel.init();
 		},
 		checkIsCorrectPanel: function(regright){
@@ -88,30 +113,6 @@
 				this.addToolBar();
 				// add action
 				this.addButtonAction();
-				// add wysiwyg
-				$("textarea").wysiwyg({
-					css: chrome.extension.getURL("css/editor.css"),
-					rmUnusedControls: true,
-					initialContent: "",
-					autoGrow: true, 
-					maxHeight: 600,
-					iFrameClass: "wysiwyg-input",
-					autoSave: true,
-				    controls: {
-				        bold: { visible : true },
-				        italic: { visible : true },
-				        strikeThrough: { visible : true },
-				        underline: { visible : true },
-				        subscript: { visible : true },
-				        superscript: { visible : true },
-				        redo: { visible : true },
-				        undo: { visible : true },
-				        insertOrderedList: { visible : true },
-				        insertUnorderedList: { visible : true },
-				        removeFormat: { visible : true },
-				        html  : { visible: true }
-				    }
-				});
 			}
 		},
 		regExp: {
