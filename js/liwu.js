@@ -154,6 +154,27 @@
 				var floors = $(this).val().split(",");
 				liwu.rightPanel.showFloors(floors);
 			});
+			
+			//folding topic content
+			$("input[name=folding_topic_content]").click(function(){
+				if ( $("#topic_content").is(":visible") ){
+					$("#topic_content").after('<div class="click_show">主楼展开</div>').slideUp("fast");
+					$(this).val("主楼展开");
+					$(".click_show").on("click", function(){
+						$(this).remove();
+						$("#topic_content").slideDown("fast");
+						$("input[name=folding_topic_content]").val("主楼折叠");
+					});
+					
+				}else{
+					$("#topic_content").slideDown("fast").next().remove();
+					$(this).val("主楼折叠");
+				}
+			});
+			
+
+			
+			
 		},
 		jumpfloor: function(){
 			var jump_num 	= parseInt( $("input[name=jump_num]").val() );
@@ -206,7 +227,12 @@
 			if ( total_replies > 0){
 				total_replies -= 1;
 				html += '<li><form id="frm_jump_to"><input type="text" name="jump_num" value="" placeholder="<= '+total_replies+'" size="2" /><input type="button" name="jump_to" value="跳" /></form></li>';
-			}			
+			}
+			//folding topic
+			var folding_topic_content = "主楼折叠";
+			html += '<li><input type="button" name="folding_topic_content" value="'+folding_topic_content+'" /></li>';
+			
+			
 			
 			$("#toolbar").append('<ul>'+html+'</ul>');
 			// add button sytle
