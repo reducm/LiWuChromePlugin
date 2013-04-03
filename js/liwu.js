@@ -128,7 +128,9 @@
 			reg_toolbar 		: /<hr>(.+?)<form/i,
 			reg_reply_floor 	: />回复<\/a>\((.+?)\):/i,
 			reg_reply_author    : /fatieren2=(.+?)(【.+?】)?\&fatieren=/i, // TODO: something not right
-			reg_misc_reference  : /引用(.+?)楼内容/i
+			reg_misc_reference  : /引用(.+?)楼内容/i,
+			reg_is_video		: /<embed.+? type=\"(.+?)\">/i,
+			reg_video_link		: /<embed src=\"(.+?)\" allowfullscreen=/i
 		},
 		addButtonAction: function(){
 			// jump
@@ -241,10 +243,13 @@
 			return authors;
 		},
 		parseTopic: function(){
+			var topic_content = liwu.global.dealReg(this.orgstr, this.regExp.reg_topic_content);
+			// move topic content into div tag
+			document.body.innerHTML = document.body.innerHTML.replace(topic_content, '<div id="topic_content">'+topic_content+'</div>');
 			this.topic = {
 				"topic_title": $("title").next().text(),
 				"topic_author": liwu.global.dealReg(this.orgstr, this.regExp.reg_topic_author, 2),
-				"topic_content": liwu.global.dealReg(this.orgstr, this.regExp.reg_topic_content),
+				"topic_content": topic_content,
 				"topic_time": liwu.global.dealReg(this.orgstr, this.regExp.reg_topic_time),
 				"reply_form": $("form[name=revert]").html(),
 				"toolbar": liwu.global.dealReg(this.orgstr, this.regExp.reg_toolbar, 1),
