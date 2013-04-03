@@ -44,9 +44,10 @@
  var liwu = {
 	global: {
 		init: function(){
-			// add wysiwyg
-			$("textarea").wysiwyg({
-				css: chrome.extension.getURL("css/editor.css"),
+			liwu.rightPanel.init();
+		},
+		wysiwygSetting:{
+			css: chrome.extension.getURL("css/editor.css"),
 				rmUnusedControls: true,
 				initialContent: "",
 				autoGrow: true, 
@@ -67,9 +68,6 @@
 			        removeFormat: { visible : true },
 			        html  : { visible: true }
 			    }
-			});
-				
-			liwu.rightPanel.init();
 		},
 		checkIsCorrectPanel: function(regright){
 			var is_correct = false;
@@ -113,6 +111,8 @@
 				this.addToolBar();
 				// add action
 				this.addButtonAction();
+				// add wysiwyg
+				$("textarea[name=neirong2]").wysiwyg(liwu.global.wysiwygSetting);
 			}
 		},
 		regExp: {
@@ -245,8 +245,7 @@
 		parseTopic: function(){
 			var topic_content = liwu.global.dealReg(this.orgstr, this.regExp.reg_topic_content);
 			// move topic content into div tag
-			//document.body.innerHTML = document.body.innerHTML.replace(topic_content, '<div id="topic_content">'+topic_content+'</div>');
-
+			document.body.innerHTML = document.body.innerHTML.replace(topic_content, '<div id="topic_content">'+topic_content+'</div>');
 			this.topic = {
 				"topic_title": $("title").next().text(),
 				"topic_author": liwu.global.dealReg(this.orgstr, this.regExp.reg_topic_author, 2),
