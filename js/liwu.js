@@ -245,7 +245,8 @@
 		parseTopic: function(){
 			var topic_content = liwu.global.dealReg(this.orgstr, this.regExp.reg_topic_content);
 			// move topic content into div tag
-			document.body.innerHTML = document.body.innerHTML.replace(topic_content, '<div id="topic_content">'+topic_content+'</div>');
+			//document.body.innerHTML = document.body.innerHTML.replace(topic_content, '<div id="topic_content">'+topic_content+'</div>');
+
 			this.topic = {
 				"topic_title": $("title").next().text(),
 				"topic_author": liwu.global.dealReg(this.orgstr, this.regExp.reg_topic_author, 2),
