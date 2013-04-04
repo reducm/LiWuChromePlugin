@@ -44,7 +44,11 @@
  var liwu = {
 	global: {
 		init: function(){
-			liwu.rightPanel.init();
+			if ( this.checkIsCorrectPanel("发新帖") ){
+				liwu.addNewTopic.init();
+			} else if ( this.checkIsCorrectPanel("right.css") ){
+				liwu.rightPanel.init();
+			}
 		},
 		wysiwygSetting:{
 			css: chrome.extension.getURL("css/editor.css"),
@@ -71,7 +75,7 @@
 		},
 		checkIsCorrectPanel: function(regright){
 			var is_correct = false;
-			if( document.body.innerHTML.indexOf(regright) > -1 ){
+			if( document.body.innerHTML.indexOf(regright) != -1 ){
 				is_correct = true;
 			}
 			return is_correct;
@@ -93,6 +97,82 @@
     			return i == arr_itm.indexOf(itm);
 			});
 			return unique_arr;
+		},
+		makeButton: function(type, name, placeholder, default_value, arr_select, size){
+			var html = '<li>';
+			var is_checked = "";
+			switch ( type ){
+				case "button":
+					html += '<input type="button" value="'+default_value+'" name="'+name+'" />';
+					break;
+				case "text":
+					html += '<input type="text" value="'+default_value+'" name="'+name+'" placeholder="'+placeholder+'" size="'+size+'" />';
+					break;
+				case "checkbox":
+					if ( localStorage.getItem(name) == 1 ){
+						is_checked = 'checked="checked"';
+					}
+					html += '<input type="checkbox" name="'+name+'" id="'+name+'" '+is_checked+' /><label for="'+name+'">'+default_value+'</label>';
+					break;
+				case "radio":
+					
+					if ( arr_select ){
+						html += '<div class="radio">';
+						$.each(arr_select, function(idx, value){
+							if ( idx == 0){
+								is_checked = 'checked="checked"';
+							}else{
+								is_checked = '';
+							}
+							html += '<input type="radio" name="'+name+'" id="'+name+idx+'" '+is_checked+' value="'+value.value+'" /><label for="'+name+idx+'">'+value.name+'</label>';
+						});
+						html += '</div>';
+					}
+					break;
+				case "select":
+					if ( arr_select ){
+						html += '<select name="'+name+'">';
+						if ( default_value ){
+							html += '<option value="0">'+default_value+'</option>';
+						}
+						$.each(arr_select, function(){
+							html += '<option value="'+this.value+'">'+this.name+'</option>';
+						});
+						html += '</select>';
+					}
+					break;
+			}
+			html += '</li>';
+			return html;
+		},
+		dealTime: function(timestr){ //处理时间,参考了油猴脚本
+			var nowtime = new Date();
+			var d =0;
+			try{
+				d = new Date(timestr.replace(/-/g, '/')); // 需要先把年-月-日改成年/月/日，否则 Invalid Date
+			}catch(err){
+				return "时间获取失败";
+			}
+
+			var ts = parseInt((nowtime - d) / 1000);    
+			if (ts < 60) { // 小于1分钟/60秒
+				return (ts + ' 秒前');
+			} else if (ts < 3600) { // 小于1小时/60分钟
+				return (parseInt(ts / 60) + '分钟前');
+			} else if (ts < 86400) { // 小于1天/24小时
+				return (parseInt(ts / 3600) + '小时前');
+			} else if (ts < 2592000) { // 小于30天
+				return (parseInt(ts / 86400) + '天前');
+			}else if(ts < 31536000) {
+				return (parseInt(ts / 2592000) + '月前');
+			}else if(ts < 315360000){
+				return (parseInt(ts / 31536000) + '年前');
+			}
+		}
+	},
+	addNewTopic:{
+		init: function(){
+			$("textarea[name=neirong]").wysiwyg(liwu.global.wysiwygSetting);
 		}
 	},
 	rightPanel: {
@@ -101,21 +181,21 @@
 		init: function(){
 			this.orgstr = document.body.innerHTML;
 			var start_time = 0;
-			if ( liwu.global.checkIsCorrectPanel("right.css") ){
-				start_time = new Date();
-				this.parseTopic();
-				//console.log(this.topic);
-				console.log("==== Data Init "+(( new Date() - start_time)/1000)+" seconds ====");
-				// add toolbar div tag before topic title
-				$("title").after('<div class="clr">&nbsp;</div>');
-				this.addToolBar();
-				// add action
-				this.addButtonAction();
-				// add wysiwyg
-				$("textarea[name=neirong2]").wysiwyg(liwu.global.wysiwygSetting);
-			}
+			console.log("==== Right Panel Loading... ====");
+			start_time = new Date();
+			this.parseTopic();
+			//console.log(this.topic);
+			console.log("==== Data Init "+(( new Date() - start_time)/1000)+" seconds ====");
+			// add toolbar div tag before topic title
+			$("title").after('<div class="clr">&nbsp;</div>');
+			this.addToolBar();
+			// add action
+			this.addButtonAction();
+			this.checkDefaultValue();
+			// add wysiwyg
+			$("textarea[name=neirong2], textarea[name=neirongy]").wysiwyg(liwu.global.wysiwygSetting);
 		},
-		regExp: {
+		regex: {
 			reg_topic			: /<\/title>(.+?)<hr><script/i,
 			reg_topic_title 	: /<\/title><a href=\".+?\">(.+?)<\/a>.+?【新窗打开】.+?<\/a>/i,
 			reg_topic_author 	: /<span.+?>(<b>)?(.+?)(【.+?】)?(<\/b>)?<\/span>/i,
@@ -131,6 +211,61 @@
 			reg_misc_reference  : /引用(.+?)楼内容/i,
 			reg_is_video		: /<embed.+? type=\"(.+?)\">/i,
 			reg_video_link		: /<embed src=\"(.+?)\" allowfullscreen=/i
+		},
+		checkDefaultValue: function(){
+			if ( localStorage.getItem("anonymous_reply") == 1 ){
+				$("input[name=nimin]").prop('checked', true);
+			}
+		},
+		addToolBar: function(){
+			$("body").append('<div id="toolbar"></div>');
+			var html = '';
+			//only show LZ
+			//var only_lz = "只看楼主";
+			//jump to floor
+			// only show author
+			var only_ta = "只看TA";
+			var arr_select = this.getAuthorListWithReliesID();
+			html += liwu.global.makeButton("select", "only_ta", "", only_ta, arr_select, "");
+
+			
+			// check total replies
+			var total_replies = this.topic.replies.length;
+			if ( total_replies > 0){
+				total_replies -= 1;
+				/*
+				html += '<form id="frm_jump_to">';
+				html += liwu.global.makeButton("text", "jump_num", total_replies, "", "", "2");
+				html += liwu.global.makeButton("button", "jump_to", "", "跳", "", "");
+				html += '</form>';
+				*/
+				//TODO: how to do this
+				html += '<li><form id="frm_jump_to"><input type="text" name="jump_num" value="" placeholder="'+total_replies+'" size="2" /><input type="button" name="jump_to" value="跳" /></form></li>';
+			}
+			//folding topic
+			var folding_topic_content = "主楼折叠";
+			html += liwu.global.makeButton("button", "folding_topic_content", "", folding_topic_content, "", "");
+			
+			//restore topic html
+			//var restore_html = "原帖还原";
+			//html += liwu.global.makeButton("button", "restore_html", "", restore_html, "", "");
+			
+			//show timestamp
+			var show_time = "时间标";
+			html += liwu.global.makeButton("checkbox", "show_timestamp", "", show_time, "", "");
+			
+			//anonymous 
+			var anonymous = "回帖匿名";
+			html += liwu.global.makeButton("checkbox", "anonymous_reply", "", anonymous, "", "");
+			
+			//Order button
+			arr_radio = [{"name": "顺排", "value": "ASC"}, {"name": "逆排", "value": "DESC"}];
+			html += liwu.global.makeButton("radio", "replies_order", "", "", arr_radio, "");
+			
+			$("#toolbar").append('<ul>'+html+'</ul>');
+			// add button sytle
+			$("#toolbar input[type=button],#toolbar input[type=checkbox]").button();
+			$("#toolbar .radio").buttonset();
 		},
 		addButtonAction: function(){
 			// jump
@@ -165,15 +300,52 @@
 						$("#topic_content").slideDown("fast");
 						$("input[name=folding_topic_content]").val("主楼折叠");
 					});
-					
 				}else{
 					$("#topic_content").slideDown("fast").next().remove();
 					$(this).val("主楼折叠");
 				}
 			});
 			
-
+			//anonymous
+			$("#anonymous_reply").change(function(){
+				if ( $(this).is(":checked")) {
+					localStorage.setItem("anonymous_reply", 1);
+					$("input[name=nimin]").prop('checked', true);
+				}else{
+					localStorage.setItem("anonymous_reply", 0);
+					$("input[name=nimin]").prop('checked', false);
+				}
+			});
 			
+			//order
+			$("input[name=replies_order]").change(function(){
+				// need animation
+				$(".floor").each(function(idx, value){
+					$(this).prependTo($("#jas"));
+				});
+				
+				// animation version
+				/*
+				var arr_floors = new Array();
+				var animate_time = 800;
+				var total_floors = $(".floor").length;
+				$(".floor").each(function(idx, value){
+					arr_floors.push(value);
+					$(value).delay( (animate_time / total_floors) * idx ).animate({"margin-left": "-99em"}, animate_time/total_floors );
+				});
+				$.each(arr_floors, function(){
+					$(this).prependTo($("#jas"));
+				});
+				
+				$.each(arr_floors, function(idx, value){
+					$(value).delay( (animate_time / total_floors) * idx ).animate({"margin-left": "0px"}, animate_time/total_floors );
+				});
+				*/
+				
+				
+				
+			});
+				
 			
 		},
 		jumpfloor: function(){
@@ -206,40 +378,9 @@
 				}
 			});
 		},
-		addToolBar: function(){
-			$("body").append('<div id="toolbar"></div>');
-			var html = '';
-			//only show LZ
-			//var only_lz = "只看楼主";
-			//jump to floor
-			// only show author
-			var only_ta = "只看TA";
-			
-			//var html = '<li><input type="button" name="only_lz" value="'+only_lz+'" /></li>';
-			
-			html += '<li><select name="only_ta">';
-			html += '<option value="0">'+only_ta+'</option>';
-			html += this.getAuthorListHtml();
-			html += '</select></li>';
-			
-			// check total replies
-			var total_replies = this.topic.replies.length;
-			if ( total_replies > 0){
-				total_replies -= 1;
-				html += '<li><form id="frm_jump_to"><input type="text" name="jump_num" value="" placeholder="<= '+total_replies+'" size="2" /><input type="button" name="jump_to" value="跳" /></form></li>';
-			}
-			//folding topic
-			var folding_topic_content = "主楼折叠";
-			html += '<li><input type="button" name="folding_topic_content" value="'+folding_topic_content+'" /></li>';
-			
-			
-			
-			$("#toolbar").append('<ul>'+html+'</ul>');
-			// add button sytle
-			$("#toolbar input[type=button]").button();
-		},
-		getAuthorListHtml: function(){
-			var list_html = "";
+		
+		getAuthorListWithReliesID: function(){
+			var authors_replies = new Array();
 			var authors = this.getAuthorList();
 			var replies = this.topic.replies;
 			$.each(authors, function(idx,author){
@@ -252,9 +393,9 @@
 				if ( idx == 0 ){
 					author += " (楼主)";
 				}
-				list_html += '<option value="'+floors+'">'+author+'</option>';
+				authors_replies[idx] = {"name": author, "value": floors};
 			})
-			return list_html;
+			return authors_replies;
 		},
 		getAuthorList: function(){
 			var authors = new Array();
@@ -269,16 +410,16 @@
 			return authors;
 		},
 		parseTopic: function(){
-			var topic_content = liwu.global.dealReg(this.orgstr, this.regExp.reg_topic_content);
+			var topic_content = liwu.global.dealReg(this.orgstr, this.regex.reg_topic_content);
 			// move topic content into div tag
 			document.body.innerHTML = document.body.innerHTML.replace(topic_content, '<div id="topic_content">'+topic_content+'</div>');
 			this.topic = {
 				"topic_title": $("title").next().text(),
-				"topic_author": liwu.global.dealReg(this.orgstr, this.regExp.reg_topic_author, 2),
+				"topic_author": liwu.global.dealReg(this.orgstr, this.regex.reg_topic_author, 2),
 				"topic_content": topic_content,
-				"topic_time": liwu.global.dealReg(this.orgstr, this.regExp.reg_topic_time),
+				"topic_time": liwu.global.dealReg(this.orgstr, this.regex.reg_topic_time),
 				"reply_form": $("form[name=revert]").html(),
-				"toolbar": liwu.global.dealReg(this.orgstr, this.regExp.reg_toolbar, 1),
+				"toolbar": liwu.global.dealReg(this.orgstr, this.regex.reg_toolbar, 1),
 				"replies": this.parseReplies(),
 				};
 		},
@@ -291,7 +432,7 @@
 			// get replies
 			$.each($("p:contains('回复')"), function(){
 				var reply_html = $(this).html();
-				var reply_floor = liwu.global.dealReg( reply_html, liwu.rightPanel.regExp.reg_reply_floor);
+				var reply_floor = liwu.global.dealReg( reply_html, liwu.rightPanel.regex.reg_reply_floor);
 				if ( reply_floor > 0){
 					// prepay container
 					var floor_id = "floor_"+reply_floor;
@@ -319,7 +460,7 @@
 					var replay = {
 						"reply_floor": reply_floor,
 						"reply_content": reply_content,
-						"reply_author": liwu.global.dealReg( reply_link, liwu.rightPanel.regExp.reg_reply_author).replace("<b>", "").replace("</b>", ""),
+						"reply_author": liwu.global.dealReg( reply_link, liwu.rightPanel.regex.reg_reply_author).replace("<b>", "").replace("</b>", ""),
 						"reply_time": reply_time,
 						"reply_reference": reply_reference,
 						"reply_link": reply_link
@@ -350,7 +491,7 @@
 				//reference
 				case "FIELDSET":
 					misc = $(reply).nextAll().slice(0, 5);
-					reply_reference = liwu.global.dealReg( misc.html(), this.regExp.reg_misc_reference);
+					reply_reference = liwu.global.dealReg( misc.html(), this.regex.reg_misc_reference);
 					reply_content = misc.next().html();
 
 					

@@ -5,10 +5,11 @@
 #toolbar{
 	position: fixed;
 	top: 0px;
-	height: 39px;
+	min-height: 30px;
 	display: block;
 	width: 100%;
 	left: 0px;
+	padding-bottom: 9px;
 	background: url(chrome-extension://__MSG_@@extension_id__/images/bg_toolbar.png);
 }
 #toolbar ul{
@@ -22,6 +23,7 @@
 	padding: 0px 5px;
 	line-height: 30px;
 	height: 30px;
+	display: block;
 }
 #toolbar input[type=button],
 #toolbar input[type=text],
@@ -36,9 +38,12 @@
 #toolbar input[name=jump_to]{
 	margin-top: -1px;
 }
+.ui-button{
+	margin-top: 2px;
+}
 .wysiwyg-input{
 	width: 300px;
-	height: 300px;
+	height: 100px;
 }
 .click_show{
 	width: 100%;
