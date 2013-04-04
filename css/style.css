@@ -10,7 +10,7 @@
 	width: 100%;
 	left: 0px;
 	padding-bottom: 9px;
-	background: url(chrome-extension://__MSG_@@extension_id__/images/bg_toolbar.png);
+	background: #6A9ADB url(chrome-extension://__MSG_@@extension_id__/images/bg_toolbar.png) left bottom repeat-x;
 }
 #toolbar ul{
 	padding: 0px;

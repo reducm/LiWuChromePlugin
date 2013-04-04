@@ -38,6 +38,10 @@
  $(document).ready(function(){
  	liwu.global.init();
  });
+ $(window).resize(function(){
+ 	liwu.rightPanel.getToolbarHeight();
+ 	$(".clr").height(liwu.rightPanel.toolbar_height);
+ });
  
  
  
@@ -178,10 +182,13 @@
 	rightPanel: {
 		topic: {},
 		orgstr: "",
+		toolbar_height: 0,
+		no_parse: 0,
 		init: function(){
 			this.orgstr = document.body.innerHTML;
 			var start_time = 0;
 			console.log("==== Right Panel Loading... ====");
+			this.checkDefaultValue();
 			start_time = new Date();
 			this.parseTopic();
 			//console.log(this.topic);
@@ -189,12 +196,21 @@
 			// add toolbar div tag before topic title
 			$("title").after('<div class="clr">&nbsp;</div>');
 			this.addToolBar();
+			//get toolbar height for offset the scroll function
+			this.getToolbarHeight();
+			$(".clr").height(liwu.rightPanel.toolbar_height);
+			
 			// add action
 			this.addButtonAction();
-			this.checkDefaultValue();
+			
 			// add wysiwyg
 			$("textarea[name=neirong2], textarea[name=neirongy]").wysiwyg(liwu.global.wysiwygSetting);
 		},
+		getToolbarHeight: function(){
+			//check toolbar height
+			this.toolbar_height = $("#toolbar").height();
+		},
+		
 		regex: {
 			reg_topic			: /<\/title>(.+?)<hr><script/i,
 			reg_topic_title 	: /<\/title><a href=\".+?\">(.+?)<\/a>.+?【新窗打开】.+?<\/a>/i,
@@ -216,6 +232,7 @@
 			if ( localStorage.getItem("anonymous_reply") == 1 ){
 				$("input[name=nimin]").prop('checked', true);
 			}
+			liwu.rightPanel.no_parse = localStorage.getItem("restore_html");
 		},
 		addToolBar: function(){
 			$("body").append('<div id="toolbar"></div>');
@@ -224,43 +241,46 @@
 			//var only_lz = "只看楼主";
 			//jump to floor
 			// only show author
-			var only_ta = "只看TA";
-			var arr_select = this.getAuthorListWithReliesID();
-			html += liwu.global.makeButton("select", "only_ta", "", only_ta, arr_select, "");
-
 			
-			// check total replies
-			var total_replies = this.topic.replies.length;
-			if ( total_replies > 0){
-				total_replies -= 1;
-				/*
-				html += '<form id="frm_jump_to">';
-				html += liwu.global.makeButton("text", "jump_num", total_replies, "", "", "2");
-				html += liwu.global.makeButton("button", "jump_to", "", "跳", "", "");
-				html += '</form>';
-				*/
-				//TODO: how to do this
-				html += '<li><form id="frm_jump_to"><input type="text" name="jump_num" value="" placeholder="'+total_replies+'" size="2" /><input type="button" name="jump_to" value="跳" /></form></li>';
+			if ( liwu.rightPanel.no_parse == 0){
+				var only_ta = "只看TA";
+				var arr_select = this.getAuthorListWithReliesID();
+				html += liwu.global.makeButton("select", "only_ta", "", only_ta, arr_select, "");
+	
+				
+				// check total replies
+				var total_replies = this.topic.replies.length;
+				if ( total_replies > 0){
+					total_replies -= 1;
+					/*
+					html += '<form id="frm_jump_to">';
+					html += liwu.global.makeButton("text", "jump_num", total_replies, "", "", "2");
+					html += liwu.global.makeButton("button", "jump_to", "", "跳", "", "");
+					html += '</form>';
+					*/
+					//TODO: how to do this
+					html += '<li><form id="frm_jump_to"><input type="text" name="jump_num" value="" placeholder="'+total_replies+'" size="2" /><input type="button" name="jump_to" value="跳" /></form></li>';
+				}
+				//folding topic
+				var folding_topic_content = "主楼折叠";
+				html += liwu.global.makeButton("button", "folding_topic_content", "", folding_topic_content, "", "");
+				
+				//show timestamp
+				var show_time = "时间标";
+				html += liwu.global.makeButton("checkbox", "show_timestamp", "", show_time, "", "");
+				
+				//Order button
+				arr_radio = [{"name": "顺排", "value": "ASC"}, {"name": "逆排", "value": "DESC"}];
+				html += liwu.global.makeButton("radio", "replies_order", "", "", arr_radio, "");
 			}
-			//folding topic
-			var folding_topic_content = "主楼折叠";
-			html += liwu.global.makeButton("button", "folding_topic_content", "", folding_topic_content, "", "");
-			
-			//restore topic html
-			//var restore_html = "原帖还原";
-			//html += liwu.global.makeButton("button", "restore_html", "", restore_html, "", "");
-			
-			//show timestamp
-			var show_time = "时间标";
-			html += liwu.global.makeButton("checkbox", "show_timestamp", "", show_time, "", "");
-			
+
 			//anonymous 
 			var anonymous = "回帖匿名";
 			html += liwu.global.makeButton("checkbox", "anonymous_reply", "", anonymous, "", "");
 			
-			//Order button
-			arr_radio = [{"name": "顺排", "value": "ASC"}, {"name": "逆排", "value": "DESC"}];
-			html += liwu.global.makeButton("radio", "replies_order", "", "", arr_radio, "");
+			//restore topic html
+			var restore_html = "原帖还原";
+			html += liwu.global.makeButton("checkbox", "restore_html", "", restore_html, "", "");
 			
 			$("#toolbar").append('<ul>'+html+'</ul>');
 			// add button sytle
@@ -317,6 +337,16 @@
 				}
 			});
 			
+			$("input[name=restore_html]").change(function(){
+				if ( $(this).is(":checked")) {
+					localStorage.setItem("restore_html", 1);
+					
+				}else{
+					localStorage.setItem("restore_html", 0);
+				}
+				document.location.reload(true);
+			});
+			
 			//order
 			$("input[name=replies_order]").change(function(){
 				// need animation
@@ -352,7 +382,8 @@
 			var jump_num 	= parseInt( $("input[name=jump_num]").val() );
 			var max_num 	= parseInt( $("input[name=jump_num]").attr("placeholder").replace("<=","") );
 			if ( jump_num > 0 && jump_num <= max_num ){
-				$.scrollTo( $("#floor_"+jump_num), 800, {offset:-39} );
+				var offsetheight = "-"+(parseInt(this.toolbar_height)+10);
+				$.scrollTo( $("#floor_"+jump_num), 800, {"offset": parseInt(offsetheight) } );
 			}else{
 				alert("Please enter the number greater than 0 and smaller than "+max_num );
 			}
@@ -411,8 +442,11 @@
 		},
 		parseTopic: function(){
 			var topic_content = liwu.global.dealReg(this.orgstr, this.regex.reg_topic_content);
-			// move topic content into div tag
-			document.body.innerHTML = document.body.innerHTML.replace(topic_content, '<div id="topic_content">'+topic_content+'</div>');
+			if ( liwu.rightPanel.no_parse == 0 ){
+				// move topic content into div tag
+				document.body.innerHTML = document.body.innerHTML.replace(topic_content, '<div id="topic_content">'+topic_content+'</div>');
+			}
+			
 			this.topic = {
 				"topic_title": $("title").next().text(),
 				"topic_author": liwu.global.dealReg(this.orgstr, this.regex.reg_topic_author, 2),
@@ -426,8 +460,10 @@
 		parseReplies: function(){
 			var replies = new Array();
 			var reply_misc = '';
-			var jas = $();
-			$("a:has(span)").first().after('<div id="jas"></div>');
+			if ( liwu.rightPanel.no_parse == 0 ){
+				$("a:has(span)").first().after('<div id="jas"></div>');
+			}
+			
 
 			// get replies
 			$.each($("p:contains('回复')"), function(){
@@ -436,8 +472,9 @@
 				if ( reply_floor > 0){
 					// prepay container
 					var floor_id = "floor_"+reply_floor;
-					$(this).before('<div class="floor" id="'+floor_id+'"></div>');
-					
+					if ( liwu.rightPanel.no_parse == 0 ){
+						$(this).before('<div class="floor" id="'+floor_id+'"></div>');
+					}
 					// get reply content and remove carriage return
 					var reply_content = $(this).find("font[title]").text().replace(/[\n\r]/g, '');
 					var reply_reference = 0;
@@ -453,7 +490,9 @@
 						reply_content = misc.reply_content;
 						reply_reference = misc.reply_reference;
 					}else{
-						$("#"+floor_id).append( $(this) );
+						if ( liwu.rightPanel.no_parse == 0 ){
+							$("#"+floor_id).append( $(this) );
+						}
 					}
 					var reply_link = $(this).find("a").first().attr("href");
 					
@@ -466,7 +505,9 @@
 						"reply_link": reply_link
 					};
 					replies[reply_floor] = replay;
-					$("#"+floor_id).appendTo( $("#jas") );
+					if ( liwu.rightPanel.no_parse == 0 ){
+						$("#"+floor_id).appendTo( $("#jas") );
+					}
 				}
 			});
 			return replies
@@ -486,7 +527,9 @@
 						}
 					});
 					misc = $(reply).nextAll().slice(0, 6);
-					this.divAroundHTML(floor_id, misc);
+					if ( liwu.rightPanel.no_parse == 0 ){
+						this.divAroundHTML(floor_id, misc);
+					}
 					break;
 				//reference
 				case "FIELDSET":
@@ -494,8 +537,9 @@
 					reply_reference = liwu.global.dealReg( misc.html(), this.regex.reg_misc_reference);
 					reply_content = misc.next().html();
 
-					
-					this.divAroundHTML(floor_id, misc);
+					if ( liwu.rightPanel.no_parse == 0 ){
+						this.divAroundHTML(floor_id, misc);
+					}
 					break;
 			}
 			var reply_misc = {
