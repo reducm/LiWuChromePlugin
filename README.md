@@ -2,6 +2,14 @@
 ##这是一个方便里屋人士的Chrome插件  
     安装方式: [Google WebStore page](https://chrome.google.com/webstore/detail/liwuhelper/gkejkdobapifnlhjfbollfinpmciabgj)
 -------------------------------------
+
+4.0 新增功能
+1) 把所有功能控制都移动到页面内，方便操作
+2) 增加WYSIWYG减少html代码的出错率
+3) 增加帖子还原功能，可以最大限度的保持帖子原样
+4) 更多内容增加中
+
+
 2.0新增功能: (传送门:[2.0](https://www.253874.com/new/adminfo.asp?html=0&id=218348), [1.0](https://www.253874.com/new/info2.asp?id=217680))  
 1)跳楼 //输入要跳的楼数可以直接跳到该楼  
 2)跳到我回复后 //该贴本人非匿名回复过的话可以直接跳到最后一次回复的地方  

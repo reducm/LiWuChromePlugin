@@ -279,7 +279,7 @@
 			html += liwu.global.makeButton("checkbox", "anonymous_reply", "", anonymous, "", "");
 			
 			//restore topic html
-			var restore_html = "原帖还原";
+			var restore_html = "原帖";
 			html += liwu.global.makeButton("checkbox", "restore_html", "", restore_html, "", "");
 			
 			$("#toolbar").append('<ul>'+html+'</ul>');
