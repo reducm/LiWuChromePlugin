@@ -63,7 +63,7 @@
 				iFrameClass: "wysiwyg-input",
 				autoSave: true,
 				rmUnwantedBr: true,
-				replaceDivWithP: true,
+				replaceDivWithP: false,
 			    controls: {
 			        bold: { visible : true },
 			        italic: { visible : true },
@@ -234,7 +234,7 @@
 			if ( localStorage.getItem("anonymous_reply") == 1 ){
 				$("input[name=nimin]").prop('checked', true);
 			}
-			liwu.rightPanel.no_parse = localStorage.getItem("restore_html");
+			liwu.rightPanel.no_parse = localStorage.getItem("restore_html") ? localStorage.getItem("restore_html") : 0;
 		},
 		addToolBar: function(){
 			$("body").append('<div id="toolbar"></div>');

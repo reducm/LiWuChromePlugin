@@ -1771,30 +1771,7 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 				
 				//add remove div
 				if (this.options.replaceDivOrP) {
-					newContent = $("<div/>").addClass("temp").append(content);
-
-					newContent.children("div").each(function () {
-						console.log( $(this) );
-						
-						
-						var element = $(this), p = element.find("p"), i;
-
-						if (0 === p.length) {
-							p = $("<p></p>");
-
-							if (this.attributes.length > 0) {
-								for (i = 0; i < this.attributes.length; i += 1) {
-									p.attr(this.attributes[i].name, element.attr(this.attributes[i].name));
-								}
-							}
-
-							p.append(element.html());
-
-							element.replaceWith(p);
-						}
-					});
-					
-					content = newContent.html();
+					content = content.replace(/<div( style=".+?")?>/g, "<br />").replace(/<\/div>/g, "");
 				}
 				
 
