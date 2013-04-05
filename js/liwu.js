@@ -62,6 +62,8 @@
 				maxHeight: 600,
 				iFrameClass: "wysiwyg-input",
 				autoSave: true,
+				rmUnwantedBr: true,
+				replaceDivWithP: true,
 			    controls: {
 			        bold: { visible : true },
 			        italic: { visible : true },
