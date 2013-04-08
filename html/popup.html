@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type="text/javascript" src="../js/libs/jquery.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/popup.js" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="../css/style.css" />
+		<link rel="stylesheet" type="text/css" href="../css/jquery-ui.min.css" />
+	</head>
+	<body>
+		<div id="content">		
+		  <div id="left" class="orange">
+		    <div id="linfo">
+		      左侧帖子列表
+		      <span id="ltitle"></span><br />	
+		      <span id="lwarn"></span>	
+		    </div>
+		    <div>				
+		      显示时间标:<input type="checkbox"  id="lshowtime" />|
+		      显示发帖人:<input type="checkbox"  id="lshowauthor" />|
+		      使用关注功能:<input type="checkbox"  id="lshowfloow" disabled="disabled" />
+		    </div>	
+
+		    <div>	
+		      按回复数排列:		
+		      <input type="button" value="由多至少" id="fromHighToLow" />
+		      <input type="button" value="由少至多" id="fromLowToHigh" />
+		    </div>	
+
+		    <div>				
+		      <input type="button" value="还原" id="lnormal"/>				
+		    </div>	
+  		</div>
+
+		<div id="right" class="orange">
+			<div id="info" class="orange">
+  				<span id="title"></span><br />	
+  				<span id="warn"></span>	
+			</div>
+
+    		<div id="buttons">
+		      <div>
+				<input type="button" value="只看楼主" id="onlyLouPig"/>
+				<input type="button" value="只看TA" id="onlyta"/>
+				<input type="button" value="逆序" id="reverse"/>
+		      </div>
+
+		      <div>
+				<input type="button" value="缩图" id="resizePic" />
+				<input type="button" value="只看有图" id="onlyPic" />
+				<input type="button" value="只看视频" id="onlyVideo" />
+		      </div>	
+
+		      <div>
+				<input type="button" value="解鸭码" id="yama" />
+				<input type="button" value="只看鸭码" id="onlyYama" />
+		      </div>			
+
+			<div>
+				跳楼:<input type="text" id="jump" />|
+				<input type="button" value="跳到我回复后" id="jumpSelf" />
+  			</div>
+
+      		<div>
+				<input type="button" value="主楼折叠" id="zlPucker" />
+				<input type="button" value="引用折叠" id="yyPucker" />
+				<input type="button" value="挖坟者" id="digHole" />							
+      		</div>	
+
+      <div>				
+	时间标:<input type="checkbox"  id="showtime" />|
+	回帖匿名:<input type="checkbox"  id="niming" />
+      </div>	
+
+      <div>
+	<input type="button" value="还原" id="normal" />
+	<input type="button" value="测试" id="testS" />
+      </div>				
+    </div>
+
+
+    <div id="result">
+
+    </div>
+  </div>					
+
+</div>
+
+</body>
+</html>

@@ -1,16 +1,16 @@
 {
   "name":"__MSG_extension_name__",
-  "version":"3.0",
+  "version":"4.0",
   "manifest_version": 2,
   "default_locale": "en",
   "icons":{
-    "16":"icon16.png",
-    "19":"icon19.png",
-    "48":"icon48.png",		
-    "128":"icon128.png"		
+    "16":"images/icon16.png",
+    "19":"images/icon19.png",
+    "48":"images/icon48.png",		
+    "128":"images/icon128.png"		
   },
   "background": {
-    "scripts":["background.js"]
+    "scripts":["js/background.js"]
   },
   "description":"__MSG_extension_description__",
   "permissions": [ 
@@ -19,11 +19,35 @@
     "tabs",		
     "unlimitedStorage" 
   ],
-
+  "web_accessible_resources":[
+  	"images/leftbg.jpg",
+	"images/ajax-loader.gif",
+	"images/jquery.wysiwyg.bg.png",
+	"images/jquery.wysiwyg.gif",
+	"css/editor.css",
+	"images/bg_toolbar.png",
+	"images/animated-overlay.gif",
+	"images/ui-bg_flat_55_999999_40x100.png",
+	"images/ui-bg_flat_75_aaaaaa_40x100.png",
+	"images/ui-bg_glass_45_0078ae_1x400.png",
+	"images/ui-bg_glass_55_f8da4e_1x400.png",
+	"images/ui-bg_glass_75_79c9ec_1x400.png",
+	"images/ui-bg_gloss-wave_45_e14f1c_500x100.png",
+	"images/ui-bg_gloss-wave_50_6eac2c_500x100.png",
+	"images/ui-bg_gloss-wave_75_2191c0_500x100.png",
+	"images/ui-bg_inset-hard_100_fcfdfd_1x100.png",
+	"images/ui-icons_056b93_256x240.png",
+	"images/ui-icons_0078ae_256x240.png",
+	"images/ui-icons_d8e7f3_256x240.png",	
+	"images/ui-icons_e0fdff_256x240.png",
+	"images/ui-icons_f5e175_256x240.png",
+	"images/ui-icons_f7a50d_256x240.png",
+	"images/ui-icons_fcd113_256x240"
+  ],
   "page_action":{
-    "default_icon": "icon19.png",
+    "default_icon": "images/icon19.png",
     "default_title": "__MSG_extension_name__",
-    "default_popup": "popup.html"
+    "default_popup": "html/popup.html"
   },
   "homepage_url":"https://github.com/reducm/LiWuChromePlugin",
   "content_scripts":[
@@ -31,7 +55,8 @@
     "matches" : [        
       "https://www.253874.com/*"
     ],
-    "js" : ["jquery.js","contentscript.js"],
+    "js" : ["js/libs/jquery.min.js","js/libs/jquery-ui-1.10.2.custom.min.js","js/liwu.js","js/libs/jquery.scrollTo.min.js","js/libs/jquery.wysiwyg.js"],
+	"css": ["css/jquery-ui-1.10.2.custom.css","css/style.css", "css/jquery.wysiwyg.css"],
     "run_at" : "document_idle",
     "all_frames" : true
     }
