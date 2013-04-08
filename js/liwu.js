@@ -41,6 +41,7 @@
  $(window).resize(function(){
  	liwu.rightPanel.getToolbarHeight();
  	$(".clr").height(liwu.rightPanel.toolbar_height);
+ 	//liwu.rightPanel.imageResize();
  });
  
  
@@ -48,6 +49,7 @@
  var liwu = {
 	global: {
 		init: function(){
+			
 			if ( this.checkIsCorrectPanel("发新帖") ){
 				liwu.addNewTopic.init();
 			} else if ( this.checkIsCorrectPanel("right.css") ){
@@ -205,6 +207,9 @@
 			// add action
 			this.addButtonAction();
 			
+			// resize image
+			this.imageResize();
+			
 			// add wysiwyg
 			$("textarea[name=neirong2], textarea[name=neirongy]").wysiwyg(liwu.global.wysiwygSetting);
 		},
@@ -212,7 +217,6 @@
 			//check toolbar height
 			this.toolbar_height = $("#toolbar").height();
 		},
-		
 		regex: {
 			reg_topic			: /<\/title>(.+?)<hr><script/i,
 			reg_topic_title 	: /<\/title><a href=\".+?\">(.+?)<\/a>.+?【新窗打开】.+?<\/a>/i,
@@ -235,6 +239,31 @@
 				$("input[name=nimin]").prop('checked', true);
 			}
 			liwu.rightPanel.no_parse = localStorage.getItem("restore_html") ? localStorage.getItem("restore_html") : 0;
+		},
+		getPageWidth: function(){
+			return $("#toolbar").width();
+		},
+		imageResize: function(){
+			var page_width = this.getPageWidth();
+			$("#topic_content img, #jas img").each(function(){
+				// get image width
+				var img_width = $(this).width();
+				if ( img_width > page_width ){
+					var new_width = page_width - 10;
+					$(this).css({"width": new_width+"px"});
+				}
+				
+				/*
+				$(this).load(function(){
+					// get image width
+					var img_width = $(this).width();
+					if ( img_width > page_width ){
+						var new_width = page_width - 10;
+						$(this).css({"width": new_width+"px"});
+					}
+				});
+				*/
+			});
 		},
 		addToolBar: function(){
 			$("body").append('<div id="toolbar"></div>');
