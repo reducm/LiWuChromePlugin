@@ -61,10 +61,10 @@
 }
 .click_show:hover{
 	border: 1px solid #448dae;
-	background: #79c9ec url(chrome-extension://__MSG_@@extension_id__/images/ui-bg_glass_75_79c9ec_1x400.png) center center repeat-x;
+	background: #79c9ec url("chrome-extension://__MSG_@@extension_id__/images/ui-bg_glass_75_79c9ec_1x400.png") center center repeat-x;
 	font-weight: normal;
 	color: #026890;
 }
 .click_show:active{
-	background: #6eac2c url(chrome-extension://__MSG_@@extension_id__/images/ui-bg_gloss-wave_50_6eac2c_500x100.png) center center repeat-x;
+	background: #6eac2c url("chrome-extension://__MSG_@@extension_id__/images/ui-bg_gloss-wave_50_6eac2c_500x100.png") center center repeat-x;
 }
