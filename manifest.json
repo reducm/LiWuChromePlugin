@@ -19,7 +19,11 @@
     "tabs",		
     "unlimitedStorage" 
   ],
-
+	"web_accessible_resources":[
+	"wysiwyg/editor.css",
+	"wysiwyg/jquery.wysiwyg.bg.png",
+	"wysiwyg/jquery.wysiwyg.gif"
+  ],
   "page_action":{
     "default_icon": "icon19.png",
     "default_title": "__MSG_extension_name__",
@@ -31,7 +35,8 @@
     "matches" : [        
       "https://www.253874.com/*"
     ],
-    "js" : ["jquery.js","contentscript.js"],
+    "js" : ["jquery.js","contentscript.js","wysiwyg/jquery.wysiwyg.js"],
+    "css": ["wysiwyg/jquery.wysiwyg.css"],
     "run_at" : "document_idle",
     "all_frames" : true
     }

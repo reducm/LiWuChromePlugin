@@ -7,7 +7,7 @@ var rport=0;
 var lport=0;
 var tcount = 0;
 var selfname;
-$(document).ready(function(){
+$(document).ready(function(){   
   if(document.body.innerHTML.indexOf(regright)>-1){	
     console.log("regrigtht");
     rport = chrome.extension.connect({name: "right"});
@@ -39,6 +39,32 @@ $(document).ready(function(){
 	  showNiming();
 	}else{noNiming();}
       }
+    });
+    //add wysiwyg support
+    $("textarea[name=neirong2], textarea[name=neirongy]").wysiwyg({
+    	css: chrome.extension.getURL("wysiwyg/editor.css"),
+		rmUnusedControls: true,
+		initialContent: "",
+		autoGrow: true, 
+		maxHeight: 600,
+		iFrameClass: "wysiwyg-input",
+		autoSave: true,
+		rmUnwantedBr: true,
+		replaceDivWithP: false,
+	    controls: {
+	        bold: { visible : true },
+	        italic: { visible : true },
+	        strikeThrough: { visible : true },
+	        underline: { visible : true },
+	        subscript: { visible : true },
+	        superscript: { visible : true },
+	        redo: { visible : true },
+	        undo: { visible : true },
+	        insertOrderedList: { visible : true },
+	        insertUnorderedList: { visible : true },
+	        removeFormat: { visible : true },
+	        html  : { visible: true }
+	    }
     });
   }else if(regleft.test(document.body.innerHTML)){//左边帖子列表处理
     console.log("reg left");
